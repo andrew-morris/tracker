@@ -3,9 +3,12 @@
 import os
 import md5
 import sys
+from time import gmtime, strftime
 
 filename = 'tracker.db'
 honeypots = ['honeypot.whatever.com']
+number = '5558675309'
+currentTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
 def sms(id):
   os.system('python ~/gvoice/sms.py '+number+' "[+] $(date) New TTY log has been created due to a successful login from honeypot: '+id+'"')
@@ -15,14 +18,14 @@ def sms(id):
 try: 
   f = open(filename, 'r+')
 except IOError:
-  print >> sys.stderr, '[!] Error: file not found- '+filename
+  print >> sys.stderr, '[!] '+currentTime+' Error: file not found- '+filename
   exit()
 database = f.read()
 try:
   database = database[:-1]
   database = dict(item.split(":") for item in database.split("\n"))
 except:
-  print >> sys.stderr, '[!] Error: database file is not in the correct format'
+  print >> sys.stderr, '[!] '+currentTime+' Error: database file is not in the correct format'
   exit()
 f.close()
 
